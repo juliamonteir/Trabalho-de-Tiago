@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,8 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    public float volume;
+    
+    [SerializeField] private float volume;
     
     private void Awake()
     {
@@ -18,5 +20,20 @@ public class AudioManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+    }
+
+    private void OnEnable()
+    {
+        AudioObserverManager.OnVolumeSliderValueChanged += ProcessVolumeChanged;
+    }
+
+    private void OnDisable()
+    {
+        AudioObserverManager.OnVolumeSliderValueChanged -= ProcessVolumeChanged; 
+    }
+
+    private void ProcessVolumeChanged(float newVolume)
+    {
+        volume = newVolume;
     }
 }
